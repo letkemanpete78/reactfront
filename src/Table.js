@@ -6,6 +6,7 @@ const TableHeader = () => {
     return (
         <thead>
             <tr>
+                <th></th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
@@ -18,7 +19,8 @@ const TableHeader = () => {
 const TableBody = props => {
     const rows = props.characterData.map((row, index) => {
         return (
-            <tr key={index} data-item={row.ID} onClick={() =>  props.onClickHandler}>
+            <tr key={index} onClick={() =>  props.onClickHandler(row.ID)}>
+                <td>Edit</td>
                 <td>{row.FirstName}</td>
                 <td>{row.LastName}</td>
                 <td>{row.Email}</td>

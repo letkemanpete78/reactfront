@@ -5,7 +5,8 @@ import uuid from 'uuid-random';
 
 class App extends Component {
   state = {
-    characters: []
+    characters: [],
+    editRecord: null
   };
 
   componentDidMount() {
@@ -19,7 +20,7 @@ class App extends Component {
       }).catch(error => this.handleHTTPGetError(error));
   }
 
-  
+
   handleHTTPGetError = (e) => {
     console.log('Failed to fetch via get.');
     // alert('Connection Error! ' + e.message);
@@ -51,25 +52,39 @@ class App extends Component {
       method: 'DELETE'
     }).catch(error => this.handleHTTPDeleteError(error));
   }
-  
+
   onClickHandler = (e) => {
-      const song = e.target.getAttribute('data-item');
-      console.log('We need to get the details for ', song);
+    const { characters } = this.state;
+
+    let tempRecord = characters.filter((character, i) => {
+      return e === character.ID;
+    })
+
+    this.setState({
+      editRecord: tempRecord[0]
+    });
+
+    // this.setState({editRecord:e});
+    //const song = e.target.getAttribute('data-item');
+    // console.log('We need to get the details for ', e);
   }
 
 
-  handleSubmit = character => {
+  handleSubmit = (FirstName, LastName, Email, ID) => {
 
-    if ((character.FirstName === character.LastName) &&  (character.Email === character.LastName))    {
+    if ((FirstName === LastName) && (Email === LastName)) {
       return false;
     }
-
-    const posturl = "http://localhost:49713/api/ContactAPI";
-    if (character.ID === "") {
-      character.ID = uuid();
+    let method = "PUT";
+    let posturl = "http://localhost:49713/api/ContactAPI";
+    if (ID === "") {
+      method = "POST";
+      ID = uuid();
+    } else {
+      posturl = posturl + "/" + ID;
     }
 
-
+    const character = { "FirstName":FirstName, "LastName":LastName, "Email":Email , "ID":ID};
     let data = JSON.stringify(character);
 
     fetch(posturl, {
@@ -77,18 +92,25 @@ class App extends Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      method: "POST",
+      method: method,
       body: data
     }).catch(error => this.handleHTTPPostError(error));
 
+    const { characters } = this.state;
+    const filtered = characters.filter((character, i) => {
+      return (ID !== character.ID)
+    });
+    
+    const newListing = [...filtered, character];
+    
     this.setState({
-      characters: [...this.state.characters, character],
+      characters: newListing,
+
     } /* , () => console.log(this.state)*/);
   }
 
-
   render() {
-    const { characters } = this.state;
+    const { characters, editRecord } = this.state;
 
     const result = characters.map((entry, index) => {
       // console.log(JSON.stringify(entry));
@@ -99,12 +121,12 @@ class App extends Component {
       <div className="container">
 
         <Table
-          onClickHandler
+          onClickHandler={this.onClickHandler}
           characterData={result}
           removeCharacter={this.removeCharacter}
         />
-        <h3>Add New</h3>
-        <Form handleSubmit={this.handleSubmit} />
+        
+        <Form handleSubmit={this.handleSubmit} editRecord={editRecord} />
       </div>
     );
   }
