@@ -36,6 +36,11 @@ class App extends Component {
     });
   }
   
+  onClickHandler = (e) => {
+      const song = e.target.getAttribute('data-item');
+      console.log('We need to get the details for ', song);
+  }
+
   handleSubmit = character => {
 
     if ((character.FirstName === character.LastName) &&  (character.Email === character.LastName))    {
@@ -77,6 +82,7 @@ class App extends Component {
       <div className="container">
 
         <Table
+          onClickHandler
           characterData={result}
           removeCharacter={this.removeCharacter}
         />

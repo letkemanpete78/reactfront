@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+
 const TableHeader = () => {
     return (
         <thead>
@@ -16,7 +18,7 @@ const TableHeader = () => {
 const TableBody = props => {
     const rows = props.characterData.map((row, index) => {
         return (
-            <tr key={index}>
+            <tr key={index} data-item={row.ID} onClick={() =>  props.onClickHandler}>
                 <td>{row.FirstName}</td>
                 <td>{row.LastName}</td>
                 <td>{row.Email}</td>
@@ -29,11 +31,11 @@ const TableBody = props => {
 }
 
 const Table = (props) => {
-    const { characterData, removeCharacter } = props;
+    const { characterData, removeCharacter,onClickHandler } = props;
     return (
         <table>
             <TableHeader />
-            <TableBody characterData={characterData} removeCharacter={removeCharacter} />
+            <TableBody characterData={characterData} removeCharacter={removeCharacter} onClickHandler={onClickHandler}/>
         </table>
     );
 }
