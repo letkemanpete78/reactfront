@@ -31,17 +31,33 @@ class App extends Component {
       })
     });
 
-    fetch(deleteurl, {
-      method: 'DELETE',
-      body: JSON.stringify(deleteUUID),
+    fetch(deleteurl + "/" + deleteUUID, {
+      method: 'DELETE'
     });
   }
-
+  
   handleSubmit = character => {
 
+    if ((character.FirstName === character.LastName) &&  (character.Email === character.LastName))    {
+      return false;
+    }
+
+    const posturl = "http://localhost:49713/api/ContactAPI";
     if (character.ID === "") {
       character.ID = uuid();
     }
+
+
+    let data = JSON.stringify(character);
+
+    fetch(posturl, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: data
+    });
 
     this.setState({
       characters: [...this.state.characters, character],
