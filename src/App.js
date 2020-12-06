@@ -16,7 +16,23 @@ class App extends Component {
         this.setState({
           characters: result
         })
-      });
+      }).catch(error => this.handleHTTPGetError(error));
+  }
+
+  
+  handleHTTPGetError = (e) => {
+    console.log('Failed to fetch via get.');
+    // alert('Connection Error! ' + e.message);
+  }
+
+  handleHTTPDeleteError = (e) => {
+    console.log('Failed to fetch via delete.');
+    // alert('Connection Error! ' + e.message);
+  }
+
+  handleHTTPPostError = (e) => {
+    console.log('Failed to fetch via post.');
+    // alert('Connection Error! ' + e.message);
   }
 
   removeCharacter = index => {
@@ -33,13 +49,14 @@ class App extends Component {
 
     fetch(deleteurl + "/" + deleteUUID, {
       method: 'DELETE'
-    });
+    }).catch(error => this.handleHTTPDeleteError(error));
   }
   
   onClickHandler = (e) => {
       const song = e.target.getAttribute('data-item');
       console.log('We need to get the details for ', song);
   }
+
 
   handleSubmit = character => {
 
@@ -62,7 +79,7 @@ class App extends Component {
       },
       method: "POST",
       body: data
-    });
+    }).catch(error => this.handleHTTPPostError(error));
 
     this.setState({
       characters: [...this.state.characters, character],
