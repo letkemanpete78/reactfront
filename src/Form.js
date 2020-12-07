@@ -8,7 +8,7 @@ class Form extends Component {
             ID: '',
             FirstName: '',
             LastName: '',
-            Email: ''
+            Email: '',
         };
         this.state = this.initialState;
     }
@@ -17,7 +17,8 @@ class Form extends Component {
         const { name, value } = event.target;
         this.setState({
             [name]: value,
-            ID: id
+            ID: id,
+            
         });
     }
 
@@ -39,11 +40,24 @@ class Form extends Component {
         this.setState(this.initialState);
     }
 
-    render() {
-        let { FirstName, LastName, Email, ID } = this.state;
-        let buttonValue = 'Add Record'
+    clearValues = (event) => {
+        setCleared("true");
+        this.setState(this.initialState);
+    }
 
+    render() {
+        let { FirstName, LastName, Email, ID} = this.state;
+        let buttonValue = 'Add Record'
+        
+        if (isCleared()) {
+            FirstName = '';
+            LastName = '';
+            Email = '';
+            ID = '';
+        } else {
+            setCleared(false);
         if (this.props.editRecord != null) {
+            
             buttonValue = 'Update Record'
             if (ID !== "") {
                 if (FirstName === "") {
@@ -62,11 +76,13 @@ class Form extends Component {
                 ID = this.props.editRecord.ID;
             }
         }
+        }
 
         return (
             <span>
             <h3>{buttonValue}</h3>
             <form onSubmit={this.onFormSubmit}>
+                <span style={{"display":"none"}} id="cleared">false</span>
                 <input type="hidden" value={ID} name="ID" id="ID" />
                 <label htmlFor="FirstName">First Name</label>
                 <input
@@ -74,7 +90,6 @@ class Form extends Component {
                     name="FirstName"
                     id="FirstName"
                     value={FirstName}
-                    // onChange={this.handleChange} />
                     onChange={(e) => this.handleChange(ID, e)} />
                 <label htmlFor="LastName">Last Name</label>
                 <input
@@ -82,7 +97,6 @@ class Form extends Component {
                     name="LastName"
                     id="LastName"
                     value={LastName}
-                    // onChange={this.handleChange} />
                     onChange={(e) => this.handleChange(ID, e)} />
 
                 <label htmlFor="Email">Email</label>
@@ -91,18 +105,33 @@ class Form extends Component {
                     name="Email"
                     id="Email"
                     value={Email}
-                    // onChange={this.handleChange} />
                     onChange={(e) => this.handleChange(ID, e)} />
                 <button type="submit">
                     {buttonValue}
                 </button>
                 <span>&nbsp;</span>
-                <button type="reset">
+                <button type="button"
+                    onClick={(e) => this.clearValues(e)}>
                     Clear Values
                 </button>
             </form>
             </span>
         );
+    }
+}
+function isCleared(){
+    let cleared = document.getElementById("cleared");
+    if (cleared === null){
+        console.log('not found!');
+        return false;
+    } else {
+        return cleared.innerHTML === "true";
+    }
+}
+function setCleared(val){
+    let cleared = document.getElementById("cleared");
+    if (cleared !== null){
+        cleared.innerHTML = val;
     }
 }
 

@@ -23,17 +23,14 @@ class App extends Component {
 
   handleHTTPGetError = (e) => {
     console.log('Failed to fetch via get.');
-    // alert('Connection Error! ' + e.message);
   }
 
   handleHTTPDeleteError = (e) => {
     console.log('Failed to fetch via delete.');
-    // alert('Connection Error! ' + e.message);
   }
 
   handleHTTPPostError = (e) => {
     console.log('Failed to fetch via post.');
-    // alert('Connection Error! ' + e.message);
   }
 
   removeCharacter = index => {
@@ -56,6 +53,7 @@ class App extends Component {
   onClickHandler = (e) => {
     const { characters } = this.state;
 
+    setCleared(false);
     let tempRecord = characters.filter((character, i) => {
       return e === character.ID;
     })
@@ -63,10 +61,6 @@ class App extends Component {
     this.setState({
       editRecord: tempRecord[0]
     });
-
-    // this.setState({editRecord:e});
-    //const song = e.target.getAttribute('data-item');
-    // console.log('We need to get the details for ', e);
   }
 
 
@@ -106,14 +100,13 @@ class App extends Component {
     this.setState({
       characters: newListing,
 
-    } /* , () => console.log(this.state)*/);
+    });
   }
 
   render() {
     const { characters, editRecord } = this.state;
 
     const result = characters.map((entry, index) => {
-      // console.log(JSON.stringify(entry));
       return entry;
     });
 
@@ -132,4 +125,10 @@ class App extends Component {
   }
 }
 
+function setCleared(val){
+  let cleared = document.getElementById("cleared");
+  if (cleared !== null){
+      cleared.innerHTML = val;
+  }
+}
 export default App;

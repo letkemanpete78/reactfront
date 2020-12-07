@@ -1,7 +1,5 @@
 import React from 'react';
 
-
-
 const TableHeader = () => {
     return (
         <thead>
@@ -28,7 +26,6 @@ const TableBody = props => {
             </tr>
         );
     });
-
     return <tbody>{rows}</tbody>;
 }
 
